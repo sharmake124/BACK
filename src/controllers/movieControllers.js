@@ -4,7 +4,7 @@ const getMovies = (req, res) => {
   database
     .query("select * from movies")
     .then(([movies]) => {
-      res.json(movies); // use res.json instead of console.log
+      res.json(movies);
     })
     .catch((err) => {
       console.error(err);
@@ -78,7 +78,6 @@ const postMovie = (req, res) => {
 };
 
 const postUsers = (req, res) => {
-  console.log("testetste");
   const { firstname, lastname, email, city, language } = req.body;
 
   database
@@ -90,7 +89,6 @@ const postUsers = (req, res) => {
       res.status(201).send({ id: result.insertId });
     })
     .catch((err) => {
-      console.error(err);
       res.sendStatus(500);
     });
 };
