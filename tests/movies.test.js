@@ -3,7 +3,6 @@ const database = require("../database");
 afterAll(() => database.end());
 const app = require("../src/app");
 
-
 describe("GET /api/movies", () => {
   it("should return all movies", async () => {
     const response = await request(app).get("/api/movies");
@@ -58,7 +57,7 @@ describe("POST /api/movies", () => {
     expect(movieInDatabase).toHaveProperty("title");
     expect(movieInDatabase.title).toStrictEqual(newMovie.title);
   });
-  
+
   it("should return an error", async () => {
     const movieWithMissingProps = { title: "Harry Potter" };
 

@@ -72,7 +72,7 @@ const postMovie = (req, res) => {
       res.status(201).send({ id: result.insertId });
     })
     .catch((err) => {
-      console.error(err);
+      /*console.error(err);*/
       res.sendStatus(500);
     });
 };
@@ -89,25 +89,54 @@ const postUsers = (req, res) => {
       res.status(201).send({ id: result.insertId });
     })
     .catch((err) => {
+      /*console.error(err); */
       res.sendStatus(500);
     });
 };
 
-// const getMovies = (req, res) => {
-//   res.json(movies);
-// };
+const updateMovie = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { title, director, year, color, duration } = req.body;
 
-// const getMovieById = (req, res) => {
-//   const id = parseInt(req.params.id);
+  database
+    .query(
+      "update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
+      [title, director, year, color, duration, id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
 
-//   const movie = movies.find((movie) => movie.id === id);
+const updateUser = (req, res) => {
+  const id = parent(req.params.id);
+  const { firstname, lastname, email, city, language } = req.body;
 
-//   if (movie != null) {
-//     res.json(movie);
-//   } else {
-//     res.status(404).send("Not Found");
-//   }
-// };
+  database
+    .query(
+      "update users set firstname = ?, set  lastname = ?, set email = ?, set city = ?, set language = ? ",
+      [firstname, lastname, email, city, language]
+    )
+    .then(([result]) => {
+      if (result.effectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
 
 module.exports = {
   getMovies,
@@ -116,4 +145,6 @@ module.exports = {
   getUserById,
   postMovie,
   postUsers,
+  updateMovie,
+  updateUser,
 };
