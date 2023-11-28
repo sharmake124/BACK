@@ -117,13 +117,13 @@ const updateMovie = (req, res) => {
 };
 
 const updateUser = (req, res) => {
-  const id = parent(req.params.id);
+  const id = parseInt(req.params.id);
   const { firstname, lastname, email, city, language } = req.body;
 
   database
     .query(
-      "update users set firstname = ?, set  lastname = ?, set email = ?, set city = ?, set language = ? ",
-      [firstname, lastname, email, city, language]
+      "UPDATE users SET firstname = ?,  lastname = ?,  email = ?,  city = ?,  language = ?  where id = ?",
+      [firstname, lastname, email, city, language, id]
     )
     .then(([result]) => {
       if (result.effectedRows === 0) {
