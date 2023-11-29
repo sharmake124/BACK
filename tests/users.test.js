@@ -140,7 +140,7 @@ describe("PUT /api/users/:id", () => {
     };
 
     const response = await request(app).put("/api/users/0").send(newtt);
+    console.log(response.body)
     expect(response.status).toEqual(404);
   });
 });
-

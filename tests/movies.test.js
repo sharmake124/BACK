@@ -3,6 +3,7 @@ const database = require("../database");
 afterAll(() => database.end());
 const app = require("../src/app");
 
+/*  GET  GET  GET ===== READ  */
 describe("GET /api/movies", () => {
   it("should return all movies", async () => {
     const response = await request(app).get("/api/movies");
@@ -13,7 +14,7 @@ describe("GET /api/movies", () => {
   });
 });
 
-/*  GET  GET  GET ===== READ  */
+
 
 describe("GET /api/movies/:id", () => {
   it("should return one movie", async () => {

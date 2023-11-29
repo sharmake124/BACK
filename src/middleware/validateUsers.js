@@ -8,9 +8,9 @@ const validateUsers = (req, res, next) => {
   if (lastname == null) {
     errors.push({ field: "lastname", message: "This field is required" });
   }
-  const emailRegex = /[a-z0-9._]+@[a-z0-9-]+\.[a-z]{2,3}/;
+  // const emailRegex = /[a-z0-9._]+@[a-z0-9-]+\.[a-z]{2,3}/;
 
-  if (!emailRegex.test(email)) {
+  if (email == null) {
     errors.push({ field: "email", message: "Invalid email" });
   }
   if (city == null) {
