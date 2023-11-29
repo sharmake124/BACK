@@ -63,7 +63,7 @@ describe("POST /api/users", () => {
     const response = await request(app)
       .post("/api/users")
       .send(userWithMissingProps);
-    expect(response.status).toEqual(500);
+    expect(response.status).toEqual(422);
   });
 });
 
@@ -103,12 +103,14 @@ describe("PUT /api/users/:id", () => {
     const response = await request(app)
       .put(`/api/users/${id}`)
       .send(updateUser);
-    
+
     expect(response.status).toEqual(204);
 
-    const [res] = await database.query("SELECT * FROM users WHERE id = ?", id);
+    const [res2] = await database.query("SELECT * FROM users WHERE id = ?", [
+      id,
+    ]);
 
-    const [userInDatabase] = res;
+    const [userInDatabase] = res2;
 
     expect(userInDatabase).toHaveProperty("id");
 
@@ -128,13 +130,17 @@ describe("PUT /api/users/:id", () => {
     expect(userInDatabase.language).toStrictEqual(updateUser.language);
   });
 
-  it("should return an error", async () => {
-    const userWithMissingProps = { firstname: "Harry Potter" };
+  it("should return no user", async () => {
+    const newtt = {
+      firstname: "Harry Potter",
+      lastname: "hhhhhhh",
+      email: "ffffff",
+      city: "llll",
+      language: "ffff",
+    };
 
-    const response = await request(app)
-      .put(`/api/users/1`)
-      .send(userWithMissingProps);
-
-    expect(response.status).toEqual(500);
+    const response = await request(app).put("/api/users/0").send(newtt);
+    expect(response.status).toEqual(404);
   });
 });
+

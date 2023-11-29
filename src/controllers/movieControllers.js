@@ -73,7 +73,7 @@ const postMovie = (req, res) => {
     })
     .catch((err) => {
       /*console.error(err);*/
-      res.sendStatus(500);
+      res.sendStatus(422);
     });
 };
 
@@ -90,7 +90,7 @@ const postUsers = (req, res) => {
     })
     .catch((err) => {
       /*console.error(err); */
-      res.sendStatus(500);
+      res.sendStatus(422);
     });
 };
 
@@ -112,7 +112,7 @@ const updateMovie = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(500);
+      res.sendStatus(422);
     });
 };
 
@@ -126,7 +126,7 @@ const updateUser = (req, res) => {
       [firstname, lastname, email, city, language, id]
     )
     .then(([result]) => {
-      if (result.effectedRows === 0) {
+      if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);
@@ -134,7 +134,7 @@ const updateUser = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(500);
+      res.sendStatus(422);
     });
 };
 
