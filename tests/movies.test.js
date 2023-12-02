@@ -14,12 +14,10 @@ describe("GET /api/movies", () => {
   });
 });
 
-
-
 describe("GET /api/movies/:id", () => {
   it("should return one movie", async () => {
     const response = await request(app).get("/api/movies/1");
-
+    console.log(response.body)
     expect(response.headers["content-type"]).toMatch(/json/);
 
     expect(response.status).toEqual(200);
@@ -147,6 +145,39 @@ describe("PUT /api/movies/:id", () => {
     };
 
     const response = await request(app).put("/api/movies/0").send(newMovie);
+
+    expect(response.status).toEqual(404);
+  });
+});
+
+/** DELETE MOVIES  */
+
+describe("DELETE /api/movies/:id", () => {
+  it("should delete a movie", async () => {
+    
+    const [insertResult] = await database.query(
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
+      ["To be deleted", "Director", "2000", "1", 120]
+    );
+    const idToDelete = insertResult.insertId;
+
+    const response = await request(app).delete(`/api/movies/${idToDelete}`);
+
+    expect(response.status).toEqual(204);
+
+    // Verify that the movie has been deleted from the database
+    const [selectResult] = await database.query(
+      "SELECT * FROM movies WHERE id=?",
+      idToDelete
+    );
+
+    expect(selectResult.length).toEqual(0);
+  });
+
+  it("should return 404 for non-existing movie", async () => {
+    const nonExistingId = 999;
+
+    const response = await request(app).delete(`/api/movies/${nonExistingId}`);
 
     expect(response.status).toEqual(404);
   });

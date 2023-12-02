@@ -34,7 +34,7 @@ const getUser = (req, res) => {
   database
     .query("select * from users")
     .then(([users]) => {
-      res.json(users); // use res.json instead of console.log
+      res.json(users); 
     })
     .catch((err) => {
       console.error(err);
@@ -42,23 +42,23 @@ const getUser = (req, res) => {
     });
 };
 
-const getUserById = (req, res) => {
+const getUserById = async (req, res) => {
   const id = parseInt(req.params.id);
 
-  database
-    .query("select * from users where id = ?", [id])
-    .then(([users]) => {
-      if (users.length > 0) {
-        res.json(users[0]);
-      } else {
-        res.sendStatus(404);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+  try {
+    const [users] = await database.query("SELECT * FROM users WHERE id = ?", [id]);
+
+    if (users.length > 0) {
+      res.status(200).json(users[0]);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
+
 
 /** POST   ===== CREATE */
 const postMovie = (req, res) => {

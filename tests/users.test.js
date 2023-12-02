@@ -16,7 +16,7 @@ describe("GET /api/users", () => {
 
 describe("GET /api/users/:id", () => {
   it("should return one user", async () => {
-    const response = await request(app).get("/api/users/1");
+    const response = await request(app).get("/api/users/2");
 
     expect(response.headers["content-type"]).toMatch(/json/);
 
@@ -140,7 +140,42 @@ describe("PUT /api/users/:id", () => {
     };
 
     const response = await request(app).put("/api/users/0").send(newtt);
-    console.log(response.body)
+
+    expect(response.status).toEqual(404);
+  });
+});
+
+
+/** DELETE USER */
+
+/* DELETE DELETE DELETE ===== DELETE */
+describe("DELETE /api/users/:id", () => {
+  it("should delete a user", async () => {
+    // Insert a movie into the database to delete later
+    const [insertResult] = await database.query(
+      "INSERT INTO users(firstname, lastname, email,city , language) VALUES (?, ?, ?, ?, ?)",
+      ["To be deleted", "Director", "2000", "1", "hhhh"]
+    );
+    const idToDelete = insertResult.insertId;
+
+    const response = await request(app).delete(`/api/users/${idToDelete}`);
+
+    expect(response.status).toEqual(204);
+
+    // Verify that the movie has been deleted from the database
+    const [selectResult] = await database.query(
+      "SELECT * FROM users WHERE id=?",
+      idToDelete
+    );
+
+    expect(selectResult.length).toEqual(0);
+  });
+
+  it("should return 404 for non-existing movie", async () => {
+    const nonExistingId = 999;
+
+    const response = await request(app).delete(`/api/users/${nonExistingId}`);
+
     expect(response.status).toEqual(404);
   });
 });
