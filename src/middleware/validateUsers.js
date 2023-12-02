@@ -3,7 +3,7 @@ const validateUsers = (req, res, next) => {
   const errors = [];
 
   if (firstname == null) {
-    errors.push({ field: "firtsname", message: "This field is required" });
+    errors.push({ field: "firstname", message: "This field is required" });
   }
   if (lastname == null) {
     errors.push({ field: "lastname", message: "This field is required" });
